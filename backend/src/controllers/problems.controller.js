@@ -1,5 +1,5 @@
 const Problem = require("../models/Problem");
-const Session = require("../models/Session");
+const UserProblem = require("../models/UserProblem");
 
 const getProblemStats = async (req, res) => {
   try {
@@ -10,40 +10,56 @@ const getProblemStats = async (req, res) => {
     }
 
     const problem = await Problem.findOne({ problemKey });
+
+    // Problem doesn't exist in DB at all
     if (!problem) {
       return res.status(200).json({
         exists: false,
         problemKey,
-        attempts: 0,
-        totalTimeSeconds: 0,
-        lastAttemptAt: null,
-        lastState: null,
+
+        accepted: false,
+        timeSpentSeconds: null,
+        reviewed: false,
+        editorial: false,
+        notes: "",
+        source: null,
+        solvedAt: null,
       });
     }
 
-    // Only sessions of current user for this problem
-    const sessions = await Session.find({
+    const userProblem = await UserProblem.findOne({
       user: req.user._id,
       problem: problem._id,
-    }).sort({ endedAt: -1 });
+    });
 
-    const attempts = sessions.length;
+    // Problem exists but user has no record yet
+    if (!userProblem) {
+      return res.status(200).json({
+        exists: true,
+        problemKey,
 
-    const totalTimeSeconds = sessions.reduce(
-      (sum, s) => sum + (s.durationSeconds || 0),
-      0
-    );
+        accepted: false,
+        timeSpentSeconds: null,
+        reviewed: false,
+        editorial: false,
+        notes: "",
+        source: null,
+        solvedAt: null,
+      });
+    }
 
-    const lastAttemptAt = attempts > 0 ? sessions[0].endedAt : null;
-    const lastState = attempts > 0 ? sessions[0].state : null;
-
+    // User has record
     return res.status(200).json({
       exists: true,
       problemKey,
-      attempts,
-      totalTimeSeconds,
-      lastAttemptAt,
-      lastState,
+
+      accepted: userProblem.accepted,
+      timeSpentSeconds: userProblem.timeSpentSeconds,
+      reviewed: userProblem.reviewed,
+      editorial: userProblem.editorial,
+      notes: userProblem.notes,
+      source: userProblem.source,
+      solvedAt: userProblem.solvedAt,
     });
   } catch (err) {
     return res.status(500).json({ message: "Server error", error: err.message });
