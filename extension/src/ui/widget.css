@@ -1,0 +1,36 @@
+#project3o-widget {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 999999;
+  font-family: Arial, sans-serif;
+}
+
+#project3o-widget .p3o-card {
+  width: 200px;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+#project3o-widget .p3o-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+#project3o-widget .p3o-timer {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+#project3o-widget .p3o-btn {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
