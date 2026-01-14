@@ -34,3 +34,17 @@
   border-radius: 10px;
   cursor: pointer;
 }
+
+#project3o-widget .p3o-muted {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-bottom: 10px;
+  user-select: text;
+}
+
+#project3o-widget .p3o-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
